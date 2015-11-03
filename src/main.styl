@@ -1,0 +1,212 @@
+@import "fonts"
+
+bg-color = rgba(117,117,117, 0.1)
+
+// row-color = rgba(140,140,140,.05)
+row-color = rgba(147,128,108,.075)
+
+green-color = rgba(113,209,97, 1)
+
+red-color = rgba(196,1,44, 1)
+
+blue-color = #3372E0
+
+value-green-color = #1CB01B  //#1AA319
+
+app-font = 'Open Sans', 'Verdana', sans-serif
+
+html, body
+	height 100%
+	width 100%
+	margin 0px
+	padding 0px
+	font-family app-font
+
+h2
+	font-weight 700
+	color #777
+
+.Application
+	display flex
+	flex-direction column
+	align-items stretch
+	height 100%
+	// width 100%
+.app-content
+	flex 1 1 auto
+	display flex
+	align-items stretch
+	overflow hidden
+.header
+	flex 0 0 auto
+	display flex
+	padding 0px 0px 0px 10px
+	background bg-color
+	color #ccc
+	border-bottom 2px solid bg-color - #111
+	div
+		background row-color
+	h2
+		font-weight 200
+		flex 1 1 auto
+	.button-row
+		flex 0 0 auto
+		display flex
+		justify-content space-around
+		align-content center
+		align-items center
+		padding 10px
+	*
+		padding 0px 5px
+	a
+		text-decoration none
+		background rgba(140,140,140,.1)
+		padding 10px
+		flex 0 0 auto
+.nav
+	flex 0 0 auto
+	display flex
+	flex-direction column
+	width 250px
+	background bg-color
+	border-right 2px solid bg-color - #111
+	border-bottom 2px solid bg-color - #111
+	padding 0px 5px
+	a
+		box-sizing border-box
+		background #fff
+		font-weight 700
+		margin 2px 0px
+		color green-color
+		text-decoration none
+		border-left 10px solid green-color
+		border-bottom 1px solid bg-color - #111
+		flex 0 0 auto
+		display flex
+		width 100%
+	span
+		padding .75em .5em .75em 1em
+	.selected
+		color #fff
+		background green-color
+
+.content
+	overflow scroll
+	flex 1 1 auto
+	background #fff
+	.row
+		background row-color
+		padding 20px
+		// margin 5px
+	.row > .row
+		margin 5px
+		border-radius 5px
+	.attribute, .with-buttons
+		display flex
+		align-items center  // this used to not be here
+		span
+			color #777
+			flex 1 0 auto
+			font-weight 700
+		h2
+			flex 1 0 auto
+		.buttons
+			flex 0 0 auto
+a
+	text-decoration none
+	color #333
+	padding 5px
+	cursor pointer
+.red
+	color red-color
+.green
+	color green-color
+.blue
+	color blue-color
+
+.nav-content
+	display flex
+	flex-direction column
+	align-items stretch
+		.nav
+			flex 0 0 auto
+		.empty
+			flex 1 1 auto
+
+.attribute
+	align-items center
+	margin .5em 0em
+	.listing
+		.type
+			font-weight 700
+			color blue-color
+		.value
+			color value-green-color  //#1AA319
+	.editing
+		flex 1 1 auto
+		display flex
+		flex-wrap wrap
+		input
+			flex 1 1 auto
+			margin 2px 2px
+			text-align center
+input
+	font-family app-font
+	font-weight 200
+	font-size 1.5em
+	background row-color
+	padding 10px
+	border 2px solid row-color
+	border-radius 5px
+
+.table-row
+	overflow auto
+	span
+		color #777
+		flex 1 0 auto
+		font-weight 700
+		margin-bottom 1em
+	table
+		th
+			color #777
+	td
+		text-align center
+		font-weight 700
+		input
+			width 5em
+			text-align center
+
+.field
+	display flex
+	justify-content space-around
+	flex-wrap wrap
+	align-items center
+	margin 1em 0em
+	span
+		font-weight 700
+		flex 0 0 auto
+		text-align center
+		padding 5px
+	input
+		flex 1 0 auto
+		text-align center
+	a
+		padding 10px
+		flex 1 1 auto
+		text-align center
+	a.green
+		background green-color
+		color #fff
+	a.blue
+		background blue-color
+		color #fff
+	a.left
+		border-top-left-radius 5px
+		border-bottom-left-radius 5px
+	a.right
+		border-top-right-radius 5px
+		border-bottom-right-radius 5px
+	// span.red
+	// 	padding 5px
+	// 	flex 0 1 auto
+	// 	width 10em

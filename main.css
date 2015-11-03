@@ -1,0 +1,291 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url("fonts/OpenSans-Light.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Open Sans Light Italic'), local('OpenSans-LightItalic'), url("fonts/OpenSans-LightItalic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url("fonts/OpenSans-Regular.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url("fonts/OpenSans-Italic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans SemiBold'), local('OpenSans-Semibold'), url("fonts/OpenSans-Semibold.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 600;
+  src: local('Open Sans SemiBold Italic'), local('OpenSans-SemiboldItalic'), url("fonts/OpenSans-SemiboldItalic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url("fonts/OpenSans-Bold.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url("fonts/OpenSans-BoldItalic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Open Sans ExtraBold'), local('OpenSans-ExtraBold'), url("fonts/OpenSans-ExtraBold.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 800;
+  src: local('Open Sans ExtraBold Italic'), local('OpenSans-ExtraBoldItalic'), url("fonts/OpenSans-ExtraBoldItalic.ttf");
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Open Sans', 'Verdana', sans-serif;
+}
+h2 {
+  font-weight: 700;
+  color: #777;
+}
+.Application {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+}
+.app-content {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+.header {
+  flex: 0 0 auto;
+  display: flex;
+  padding: 0px 0px 0px 10px;
+  background: rgba(117,117,117,0.1);
+  color: #ccc;
+  border-bottom: 2px solid rgba(100,100,100,0.1);
+}
+.header div {
+  background: rgba(147,128,108,0.075);
+}
+.header h2 {
+  font-weight: 200;
+  flex: 1 1 auto;
+}
+.header .button-row {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.header * {
+  padding: 0px 5px;
+}
+.header a {
+  text-decoration: none;
+  background: rgba(140,140,140,0.1);
+  padding: 10px;
+  flex: 0 0 auto;
+}
+.nav {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  background: rgba(117,117,117,0.1);
+  border-right: 2px solid rgba(100,100,100,0.1);
+  border-bottom: 2px solid rgba(100,100,100,0.1);
+  padding: 0px 5px;
+}
+.nav a {
+  box-sizing: border-box;
+  background: #fff;
+  font-weight: 700;
+  margin: 2px 0px;
+  color: #71d161;
+  text-decoration: none;
+  border-left: 10px solid #71d161;
+  border-bottom: 1px solid rgba(100,100,100,0.1);
+  flex: 0 0 auto;
+  display: flex;
+  width: 100%;
+}
+.nav span {
+  padding: 0.75em 0.5em 0.75em 1em;
+}
+.nav .selected {
+  color: #fff;
+  background: #71d161;
+}
+.content {
+  overflow: scroll;
+  flex: 1 1 auto;
+  background: #fff;
+}
+.content .row {
+  background: rgba(147,128,108,0.075);
+  padding: 20px;
+}
+.content .row > .row {
+  margin: 5px;
+  border-radius: 5px;
+}
+.content .attribute,
+.content .with-buttons {
+  display: flex;
+  align-items: center;
+}
+.content .attribute span,
+.content .with-buttons span {
+  color: #777;
+  flex: 1 0 auto;
+  font-weight: 700;
+}
+.content .attribute h2,
+.content .with-buttons h2 {
+  flex: 1 0 auto;
+}
+.content .attribute .buttons,
+.content .with-buttons .buttons {
+  flex: 0 0 auto;
+}
+a {
+  text-decoration: none;
+  color: #333;
+  padding: 5px;
+  cursor: pointer;
+}
+.red {
+  color: #c4012c;
+}
+.green {
+  color: #71d161;
+}
+.blue {
+  color: #3372e0;
+}
+.nav-content {
+  display: flex;
+  flex-direction: column;
+}
+.nav-content align-items stretch .nav {
+  flex: 0 0 auto;
+}
+.nav-content align-items stretch .empty {
+  flex: 1 1 auto;
+}
+.attribute {
+  align-items: center;
+  margin: 0.5em 0em;
+}
+.attribute .listing .type {
+  font-weight: 700;
+  color: #3372e0;
+}
+.attribute .listing .value {
+  color: #1cb01b;
+}
+.attribute .editing {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+.attribute .editing input {
+  flex: 1 1 auto;
+  margin: 2px 2px;
+  text-align: center;
+}
+input {
+  font-family: 'Open Sans', 'Verdana', sans-serif;
+  font-weight: 200;
+  font-size: 1.5em;
+  background: rgba(147,128,108,0.075);
+  padding: 10px;
+  border: 2px solid rgba(147,128,108,0.075);
+  border-radius: 5px;
+}
+.table-row {
+  overflow: auto;
+}
+.table-row span {
+  color: #777;
+  flex: 1 0 auto;
+  font-weight: 700;
+  margin-bottom: 1em;
+}
+.table-row table th {
+  color: #777;
+}
+.table-row td {
+  text-align: center;
+  font-weight: 700;
+}
+.table-row td input {
+  width: 5em;
+  text-align: center;
+}
+.field {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 1em 0em;
+}
+.field span {
+  font-weight: 700;
+  flex: 0 0 auto;
+  text-align: center;
+  padding: 5px;
+}
+.field input {
+  flex: 1 0 auto;
+  text-align: center;
+}
+.field a {
+  padding: 10px;
+  flex: 1 1 auto;
+  text-align: center;
+}
+.field a.green {
+  background: #71d161;
+  color: #fff;
+}
+.field a.blue {
+  background: #3372e0;
+  color: #fff;
+}
+.field a.left {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.field a.right {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
