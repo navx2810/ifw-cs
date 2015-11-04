@@ -2,6 +2,7 @@ m = require "mithril"
 Util = require '../util'
 VM = require '../viewmodels'
 Model = require '../model'
+request = require 'superagent'
 
 module.exports =
    controller: (props) ->
@@ -42,34 +43,63 @@ module.exports =
 
          model_string = JSON.stringify Model()
 
-         m.request(method: "POST", url: "http://localhost:8000/create", data: (key: 'secret', email: @email, pass: @pass, json: model_string))
-            .then (msg) =>
-               console.log "Create request data recieved"
-               console.log msg
-               if msg.error?
-                  @error_message()[2] = msg.error
-               if msg.id? and msg.email?
-                  VM.AccountID msg.id
-                  VM.Email msg.email
+         request
+            .post "http://localhost:8000/create"
+            .set "key", Util.SecretKey
+            .send email: @email, pass: @pass, json: model_string
+            .end (err, res) =>
+               console.log res
+               if not res.ok
+                  @error_message()[2] = res.text
+               else
+                  VM.AccountID res.body.id
+                  VM.Email res.body.email
+                  m.route '/'
+               m.redraw true
+
+         # m.request(method: "POST", url: "http://localhost:8000/create", data: (key: Util.SecretKey, email: @email, pass: @pass, json: model_string))
+         #    .then (msg) =>
+         #       console.log "Create request data recieved"
+         #       console.log msg
+         #       if msg.error?
+         #          @error_message()[2] = msg.error
+         #       if msg.id? and msg.email?
+         #          VM.AccountID msg.id
+         #          VM.Email msg.email
 
       @Login = (e) =>
          if not @EntryDetailsAreValid()
             return
 
-         console.log "Making the Login request now"
-         m.request(method: "POST", url: "http://localhost:8000/login", data: (key: 'secret', email: @email, pass: @pass))
-            .then (msg) =>
-               console.log "Login request data recieved"
-               if msg.error?
-                  @error_message()[2] = msg.error
-               else if msg.id? and msg.email?
-                  VM.AccountID msg.id
-                  VM.Email msg.email
-                  console.log "Current ID: #{VM.AccountID()}, Email: #{VM.Email()}"
-                  @error_message ["", "", ""]
-                  VM.SetAlert "#{msg.email} logged in", 3
-                  VM.CurrentRoute "/"
-                  m.route "/"
+         model_string = JSON.stringify Model()
+
+         request
+            .post 'http://localhost:8000/login'
+            .set "key", Util.SecretKey
+            .send email: @email, pass: @pass, json: model_string
+            .end (err, res) =>
+               console.log res
+               if not res.ok
+                  @error_message()[2] = res.text
+               else
+                  VM.AccountID res.body.id
+                  VM.Email res.body.email
+                  m.route '/'
+               m.redraw true
+         # console.log "Making the Login request now"
+         # m.request(method: "POST", url: "http://localhost:8000/login", data: (key: Util.SecretKey, email: @email, pass: @pass))
+         #    .then (msg) =>
+         #       console.log "Login request data recieved"
+         #       if msg.error?
+         #          @error_message()[2] = msg.error
+         #       else if msg.id? and msg.email?
+         #          VM.AccountID msg.id
+         #          VM.Email msg.email
+         #          console.log "Current ID: #{VM.AccountID()}, Email: #{VM.Email()}"
+         #          @error_message ["", "", ""]
+         #          VM.SetAlert "#{msg.email} logged in", 3
+         #          VM.CurrentRoute "/"
+         #          m.route "/"
       @
 
    view: (ctrl, props, extras) ->

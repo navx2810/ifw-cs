@@ -13,3 +13,6 @@ module.exports = VM =
          m.startComputation()
          VM.Alert ""
          m.endComputation() ), seconds
+
+   Curves: m.prop
+      Selected: null

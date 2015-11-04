@@ -1,7 +1,7 @@
 m = require 'mithril'
 request = require 'superagent'
 
-{Model, VM, Nav, Characters, Curves, Options, Login} = require './components'
+{Model, VM, Nav, Characters, Curves, Options, Login, Util} = require './components'
 
 alert_style =
    flex: '1 1 auto'
@@ -43,9 +43,26 @@ LoginButtons =
       @id = VM.AccountID
 
       @Save = =>
-         m.request method: "PUT", url: "http://localhost:8000/accounts?id=#{VM.AccountID()}", data: (model: JSON.stringify Model())
-            .then (msg) =>
-               VM.SetAlert "Saved your data", 3
+         # m.startComputation()
+
+         request
+            .put "http://localhost:8000/accounts"
+            .set "key", Util.SecretKey
+            .query id: VM.AccountID()
+            .send data: JSON.stringify Model
+            .end (err, res) ->
+               if res.ok
+                  VM.SetAlert "Saved your data", 3
+                  # m.redraw true
+               else
+                  VM.SetAlert "Failed to save data", 3
+                  # m.redraw true
+               m.redraw true
+               # m.endComputation()
+
+         # m.request method: "PUT", url: "http://localhost:8000/accounts?id=#{VM.AccountID()}", data: (model: JSON.stringify Model())
+         #    .then (msg) =>
+         #       VM.SetAlert "Saved your data", 3
 
       @Logout = =>
          VM.AccountID ""
@@ -61,9 +78,20 @@ LoginButtons =
          #          Model JSON.parse msg.data
          #          m.route '/'
 
-         req = request.get "http://localhost:8000/accounts"
-         req.query id: VM.AccountID()
-         req.end((e) => console.log e.text)
+         request
+            .get "http://localhost:8000/accounts"
+            .set "key", Util.SecretKey
+            .accept 'application/json'
+            .query id: VM.AccountID()
+            .end (err, data) =>
+               Model().characters = data.body.characters
+
+               current_selected_character = VM.Curves().Selected
+               if not _.isNull current_selected_character
+                  VM.Curves().Selected = _.findWhere data.body.characters, id: current_selected_character.id
+
+               m.redraw true
+               # m.route '/'
 
       @
 

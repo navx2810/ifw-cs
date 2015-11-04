@@ -2,6 +2,7 @@ m = require "mithril"
 uuid = require 'node-uuid'
 
 module.exports = Util =
+   SecretKey: "77989e26-fdc2-42fa-b09b-fd07020e38e1"
    NonEmptyStringRegex: /^\S+.+/i
    EmailRegex: /^[a-z0-9\-]+@[a-z0-9\-]+(\.[a-z0-9\-]+)+/i
 
