@@ -1,59 +1,88 @@
 m = require "mithril"
-Model = require '../model'
+_ = require 'lodash'
+
 Attribute = require './attribute'
 
+VM = require '../viewmodels'
+Util = require '../util'
+{Characters} = VM
+
 module.exports =
-   controller: (props) ->
-      @character = props.character
-      @hidden = m.prop true
-      @editing = m.prop false
+   view: (ctrl, props, extras) ->
+      {character, key} = props
 
-      @inputValue = null
+      rows = []
 
-      @Save = (e) =>
-         @inputValue = e.target.value
-         valueIsEmpty = !!@inputValue.trim()
+      if _.contains Characters().EditingIDs, character.id
+         rows.push m.component Editing, (character: character)
+      else
+         rows.push m.component Default, (character: character, index: key)
 
-         if valueIsEmpty
-            @character.id = @inputValue
-            @inputValue = null
+      if _.contains Characters().ShowingIDs, character.id
+         rows.push m.component Showing, (character: character)
 
-         @editing false
+      m '.row', rows
 
-      @
+Editing =
+   saveName: (character, name) ->
+      name = _.trimLeft name
+
+      if not _.isEmpty(name) and not _.isNull(name)
+         character.id = name
+
+      _.pull Characters().EditingIDs, character.id
 
    view: (ctrl, props, extras) ->
       {character} = props
 
-      show_button = null
-      id_row = null
-      buttons_row = []
-      attributes_row = null
+      m '.with-buttons',
+         m 'input', (placeholder: "ID = #{character.id} | Press ENTER or lose focus to save", style: (flex: '1 1 auto'), onchange: m.withAttr "value", (val) -> Editing.saveName character, val)
+         m 'button-row',
+            m 'a.red', (onclick: -> _.pull Characters().EditingIDs, character.id), "cancel"
 
-      if ctrl.hidden()
-         show_button = m 'a.blue', (onclick: -> ctrl.hidden false), "Show"
-         attributes_row = m 'div', null
-      else
-         show_button = m 'a.blue', (onclick: -> ctrl.hidden true), "Hide"
-         attributes_row = m.component Attribute, (character: character)
+Default =
+   toggleShown: (character, is_shown) ->
+      if is_shown
+         _.pull Characters().ShowingIDs, character.id
+      else Characters().ShowingIDs.push character.id
 
-      if ctrl.editing()
-         id_row = m 'input', (placeholder: character.id, style: (flex: '1 1 auto'), onchange: ctrl.Save)
-      else
-         id_row = "#{character.id}"
+   gotoCurves: (character, index) ->
+      VM.Curves().Selected = character
+      m.route "Curves?id=#{index}"
 
-      if !ctrl.editing()
-         buttons_row.push show_button
-         buttons_row.push m 'a.green', (onclick: -> ctrl.editing true) , "Edit"
-         buttons_row.push m 'a.blue', (onclick: -> m.route "Curves?id=#{props.key}") , "To Curves"
-         buttons_row.push m 'a.red', (onclick: -> Model().characters.splice props.key, 1), "Delete"
-      else
-         buttons_row.push m 'a.green', (onclick: ctrl.Save), "Save"
-         buttons_row.push m 'a.red', (onclick: -> ctrl.editing false) , "Cancel"
+   view: (ctrl, props, extras) ->
+      {character, index} = props
 
-      m '.row', (key: props.key),
+      showing_row = []
+
+      is_shown = _.contains Characters().ShowingIDs, character.id
+
+      m '.with-buttons',
+         m 'span', "#{character.id}"
+         m 'button-row',
+            m 'a.blue', (onclick: -> Default.toggleShown character, is_shown), if is_shown then "hide" else "show"
+            m 'a.blue', (onclick: -> Default.gotoCurves character, index), 'curves..'
+            m 'a.green', (onclick: -> Characters().EditingIDs.push character.id), "edit"
+            m 'a.red', "remove"
+
+Showing =
+   add: (character) ->
+      character.attributes.push Util.CreateNewAttribute {}
+   clear: (character) ->
+      character.attributes = []
+      Characters().EditingAttributes = []
+   view: (ctrl, props, extras) ->
+      {character} = props
+
+      attribute_rows = []
+
+      for attribute, index in character.attributes
+         attribute_rows.push m.component Attribute, (character: character, attribute: attribute, index: index)
+
+      m '.row',
          m '.with-buttons',
-            m 'span', (style: (display: "flex")), id_row
+            m 'span', "Attributes"
             m '.buttons',
-               buttons_row
-         attributes_row
+               m 'a.green', (onclick: -> Showing.add character), 'add'
+               m 'a.red', (onclick: -> Showing.clear character),'clear all'
+         m '.row', attribute_rows

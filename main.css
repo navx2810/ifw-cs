@@ -191,6 +191,9 @@ a {
 .blue {
   color: #3372e0;
 }
+.value-green {
+  color: #1cb01b;
+}
 .nav-content {
   display: flex;
   flex-direction: column;
@@ -222,7 +225,8 @@ a {
   margin: 2px 2px;
   text-align: center;
 }
-input {
+input,
+select {
   font-family: 'Open Sans', 'Verdana', sans-serif;
   font-weight: 200;
   font-size: 1.5em;
@@ -230,6 +234,14 @@ input {
   padding: 10px;
   border: 2px solid rgba(147,128,108,0.075);
   border-radius: 5px;
+}
+input option,
+select option {
+  color: #555;
+}
+input option:disabled,
+select option:disabled {
+  background: #888;
 }
 .table-row {
   overflow: auto;

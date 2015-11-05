@@ -1,6 +1,31 @@
 m = require "mithril"
 
 module.exports = VM =
+   ProjectDirectory: m.prop "C:/Hello/"
+
+   InEngineDataTypes: m.prop [
+      "bool"
+      "string"
+      "float"
+      "int"
+      "List"
+      "GameObject"
+      "Function"
+      "Action"
+      "Delegate"
+      "Vector3"
+      "Dictionary"
+      "Vector2"
+      "Transform"
+      "Rigidbody"
+      "Camera"
+      "BoxCollider"
+   ]
+
+   UserDefinedDataTypes: m.prop ["MyGO"]
+
+   UserDataTypesEditing: m.prop []
+
    CurrentRoute: m.prop ""
    AccountID: m.prop ""
    Email: m.prop ""
@@ -16,3 +41,10 @@ module.exports = VM =
 
    Curves: m.prop
       Selected: null
+      DamagePercent: false
+      CostPercent: false
+
+   Characters: m.prop
+      EditingIDs: []
+      EditingAttributes: []
+      ShowingIDs: []

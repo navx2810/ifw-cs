@@ -17,14 +17,13 @@ module.exports = Util =
       return new_data
 
    CreateNewAttribute: (data) ->
-      {key, value, type} = data
-      new_data = {}
+      {key, default_value, type} = data
 
-      if key? then new_data.key = key else new_data.key = ""
-      if value? then new_data.value = value else new_data.value = ""
-      if type? then new_data.type = type else new_data.type = ""
+      if key? then key = key else key = ""
+      if type? then type = type else type = ""
+      if default_value? then default_value = default_value else null
 
-      return new_data
+      return (key: key, type: type, default_value: default_value)
 
    StringsAreEmpty: (data) ->
       is_empty = true

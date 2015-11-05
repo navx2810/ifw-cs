@@ -82,12 +82,34 @@ TableView =
       character.curves[0] = (cost: 0, damage: 0, notifier: false)
    Delete: (character, index) ->
       _.pullAt character.curves, index
+
+   GenerateDeltaTag: (a, b, percentage) ->
+      value = a - b
+
+      if not percentage
+         if value > 0
+            m 'td.green', "+#{a - b}"
+         else if value < 0
+            m 'td.red', "#{a - b}"
+         else
+            m 'td', (style: (color: "#777")), "#{a - b}"
+      else
+         parsed_value = parseFloat((a / b) * 100).toFixed(2)
+         parsed_value = if parsed_value is "NaN" then 0 else parsed_value        # Had some issues with parsed value showing up as NaN%, this is to fix that
+
+         if value > 0
+            m 'td.green', "#{parsed_value}%"
+         else if value < 0
+            m 'td.red', "#{parsed_value}%"
+         else
+            m 'td', (style: (color: "#777")), "#{parsed_value}%"
+
    view: (ctrl, props, extras) ->
       {character, index} = props
 
       level_row = [
          m 'th', m 'a.green', (onclick: -> TableView.AddLevel character),
-            "Add Level"
+            "Add"
             m 'a.blue', (title: "Add a level to your character"), "?"
       ]
 
@@ -105,19 +127,18 @@ TableView =
             m 'a.blue', (title: "Delete every and clear the first level"), "?"
       ]
 
-      delta_damage_row = [
-         m 'th', "Delta Damage"
-      ]
-
-      delta_cost_row = [
-         m 'th', "Delta Cost"
-      ]
+      delta_damage_row = []
+      
+      delta_cost_row = []
 
       notifier_row = [
          m 'th',
             "On LevelUp Notifier"
             m 'a.blue', (title: "An option to define a 'hook' in the code-behind for when a player attains this level.\nYou will be able to drop a function in the inspector which will pass the data as arguments"), "?"
       ]
+
+      DamagePercent = VM.Curves().DamagePercent
+      CostPercent = VM.Curves().CostPercent
 
       for curve, index in character.curves
          level_row.push m 'th', "#{index + 1}"
@@ -127,13 +148,34 @@ TableView =
 
          if index is 0
             deletion_row.push m 'td', m 'a.red', (onclick: -> TableView.ClearFirstColumn character), "Clear"
-            delta_damage_row.push m 'td', (style: (color: "#777")), "N/A"
-            delta_cost_row.push m 'td', (style: (color: "#777")), "N/A"
+            # delta_damage_row.push m 'td', (style: (color: "#777")), "N/A"
+            # delta_cost_row.push m 'td', (style: (color: "#777")), "N/A"
          else
             deletion_row.push m 'td', m 'a.red', (index: index, onclick: (e) => TableView.Delete(character, e.target.attributes.index.value)), "X"
-            delta_damage_row.push m 'td', (style: (color: "#777")), "#{curve.damage - character.curves[index-1].damage}"
-            delta_cost_row.push m 'td', (style: (color: "#777")), "#{curve.cost - character.curves[index-1].cost}"
+            delta_damage_row.push TableView.GenerateDeltaTag curve.damage, character.curves[index-1].damage, DamagePercent
+            delta_cost_row.push TableView.GenerateDeltaTag curve.cost, character.curves[index-1].cost, CostPercent
 
+      if VM.Curves().DamagePercent
+         delta_damage_row.unshift m 'td',
+             m 'input[type=checkbox]', (style: (width: '1em'), checked: true, onclick: -> VM.Curves().DamagePercent = !DamagePercent)
+             m 'a.blue', (title: "Display row as a percentage instead of amount delta?"), "?"
+         delta_damage_row.unshift m 'th', "Delta Damage"
+      else
+         delta_damage_row.unshift m 'td',
+             m 'input[type=checkbox]', (style: (width: '1em'), onclick: -> VM.Curves().DamagePercent = !DamagePercent)
+             m 'a.blue', (title: "Display row as a percentage instead of amount delta?"), "?"
+          delta_damage_row.unshift m 'th', "Delta Damage"
+
+      if VM.Curves().CostPercent
+         delta_cost_row.unshift m 'td',
+             m 'input[type=checkbox]', (style: (width: '1em'), checked: true, onclick: -> VM.Curves().CostPercent = !CostPercent)
+             m 'a.blue', (title: "Display row as a percentage instead of amount delta?"), "?"
+          delta_cost_row.unshift m 'th', 'Delta Cost'
+      else
+         delta_cost_row.unshift m 'td',
+             m 'input[type=checkbox]', (style: (width: '1em'), onclick: -> VM.Curves().CostPercent = !CostPercent)
+             m 'a.blue', (title: "Display row as a percentage instead of amount delta?"), "?"
+          delta_cost_row.unshift m 'th', 'Delta Cost'
       m '.row.table-row',
          m 'table',
             m 'tr', level_row

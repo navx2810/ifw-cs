@@ -123,6 +123,8 @@ a
 	color green-color
 .blue
 	color blue-color
+.value-green
+	color value-green-color
 
 .nav-content
 	display flex
@@ -150,7 +152,8 @@ a
 			flex 1 1 auto
 			margin 2px 2px
 			text-align center
-input
+
+input, select
 	font-family app-font
 	font-weight 200
 	font-size 1.5em
@@ -158,6 +161,10 @@ input
 	padding 10px
 	border 2px solid row-color
 	border-radius 5px
+	option
+		color #555
+	option:disabled
+		background #888
 
 .table-row
 	overflow auto
