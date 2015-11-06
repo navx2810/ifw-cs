@@ -2,6 +2,7 @@
   "dependencies": {
     "lodash": "^3.10.1",
     "mithril": "^0.2.0",
+    "mustache": "^2.2.0",
     "node-uuid": "^1.4.3",
     "superagent": "^1.4.0"
   },
@@ -10,8 +11,12 @@
   },
   "scripts": {
     "css": "stylus -w src/main.styl -o main.css",
-    "build" : "webpack",
+    "build": "webpack",
     "build:min": "webpack --optimize-minimize",
-    "dev": "webpack-dev-server"
-  }
+    "dev": "webpack-dev-server",
+    "app": "npm run build:min && electron ."
+  },
+  "name": "Idler-Framework",
+  "version": "0.0.2",
+  "main": "src/app/main.js"
 }

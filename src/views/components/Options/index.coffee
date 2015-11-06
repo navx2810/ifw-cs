@@ -1,6 +1,7 @@
 m = require "mithril"
 
 VM = require '../viewmodels'
+Model = require '../model'
 
 _ = require 'lodash'
 
@@ -17,6 +18,18 @@ module.exports =
 
 Export =
    ShowDialogue: ->
+      ipc.send 'show:dialog'
+
+      ipc.on 'dialog:reply', (directory) ->
+         VM.ProjectDirectory directory
+         m.redraw true
+
+   ExportData: ->
+      ipc.send 'export', (directory: VM.ProjectDirectory(), model: Model())
+
+      ipc.on 'export:err', (message) ->
+         VM.SetAlert message, 5
+         m.redraw true
 
    view: (ctrl, props, extras) ->
       m '.row',
@@ -27,6 +40,7 @@ Export =
                   m 'em', (style: padding: '0px 0px 0px 1em'), "#{VM.ProjectDirectory()}"
                m '.buttons',
                   m 'a.blue', (onclick: Export.ShowDialogue), "change"
+                  m 'a', (onclick: Export.ExportData), "export"
 DataTypes =
    AddUserType: ->
       VM.UserDefinedDataTypes().push ""

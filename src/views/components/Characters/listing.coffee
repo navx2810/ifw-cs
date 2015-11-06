@@ -28,7 +28,9 @@ Editing =
       name = _.trimLeft name
 
       if not _.isEmpty(name) and not _.isNull(name)
+         _.pull Characters().ShowingIDs, character.id
          character.id = name
+         Characters().ShowingIDs.push character.id
 
       _.pull Characters().EditingIDs, character.id
 
