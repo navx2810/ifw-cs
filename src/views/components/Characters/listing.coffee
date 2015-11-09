@@ -4,6 +4,7 @@ _ = require 'lodash'
 Attribute = require './attribute'
 
 VM = require '../viewmodels'
+Model = require '../model'
 Util = require '../util'
 {Characters} = VM
 
@@ -52,6 +53,9 @@ Default =
       VM.Curves().Selected = character
       m.route "Curves?id=#{index}"
 
+   remove: (character, index) ->
+      Model().characters.splice(index, 1)
+
    view: (ctrl, props, extras) ->
       {character, index} = props
 
@@ -65,7 +69,7 @@ Default =
             m 'a.blue', (onclick: -> Default.toggleShown character, is_shown), if is_shown then "hide" else "show"
             m 'a.blue', (onclick: -> Default.gotoCurves character, index), 'curves..'
             m 'a.green', (onclick: -> Characters().EditingIDs.push character.id), "edit"
-            m 'a.red', "remove"
+            m 'a.red', (onclick: -> Default.remove character, index), "remove"
 
 Showing =
    add: (character) ->

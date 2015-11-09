@@ -19,7 +19,8 @@ module.exports = VM =
       "Transform"
       "Rigidbody"
       "Camera"
-      "BoxCollider"
+      "BoxCollider",
+      "Paragraph"
    ]
 
    UserDefinedDataTypes: m.prop ["MyGO"]
