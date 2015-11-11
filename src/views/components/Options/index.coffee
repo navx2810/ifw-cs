@@ -3,6 +3,8 @@ m = require "mithril"
 VM = require '../viewmodels'
 Model = require '../model'
 
+Currency = require './currency'
+
 _ = require 'lodash'
 
 module.exports =
@@ -15,6 +17,7 @@ module.exports =
          m 'h2', "Project Options"
          m.component Export
          m.component DataTypes
+         m.component Currency
 
 Export =
    ShowDialogue: ->

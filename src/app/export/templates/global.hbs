@@ -1,0 +1,55 @@
+using UnityEngine;
+using System.Collections;
+using Vexe.Runtime.Types;
+
+namespace Idler.GameObjects
+{
+    [HasRequirements]
+    public class Idler : BetterBehaviour
+    {
+        [RequiredFromChildren(Add = true, Create = true, id = 0, Path = "Characters")]
+        public Characters Characters { get; set; }
+
+        [RequiredFromChildren(Add = true, Create = true, id = 1, Path = "Currency")]
+        public Currency Currency { get; set; }
+
+        #if UNITY_EDITOR
+        [UnityEditor.MenuItem("Idler/Setup Global GameObject")]
+        static void SetUpGO()
+        {
+            var go = new GameObject("Idler");
+            go.AddComponent<Idler>();
+        }
+        #endif
+    }
+
+    [HasRequirements]
+    public class Characters : BetterBehaviour
+    {
+        #region Characters
+
+        {{#each characters}}
+        [RequiredFromChildren(Add = true, Create = true, id = {{@index}}, Path = "{{id}}")]
+        public {{class_name}}.Character {{class_name}} { get; set; }
+        {{/each}}
+
+        #endregion
+
+        [Show]
+        public void SetAllWithDefaults()
+        {
+            #region Setting Defaults
+
+            {{#each characters}}
+            {{class_name}}.FreshGameData.WithDefaults();
+            {{/each}}
+            
+            #endregion
+        }
+    }
+
+    public class Currency : BetterBehaviour
+    {
+
+    }
+}

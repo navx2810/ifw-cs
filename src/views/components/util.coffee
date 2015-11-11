@@ -34,4 +34,8 @@ module.exports = Util =
 
       return is_empty
 
-GenerateUniqueID = -> uuid.v4()
+GenerateUniqueID = -> 
+   id = uuid.v4()
+   new_id = id.replace /\-/g, ""
+   return new_id
+

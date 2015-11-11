@@ -1,0 +1,111 @@
+using UnityEngine;
+using System.Collections;
+using Vexe.Runtime.Types;
+using System.Collections.Generic;
+using Idler.Framework;
+
+namespace {{class_name}}
+{
+    public class Character : BetterBehaviour
+    {
+        private Data _FreshGameData;
+
+        [Default("{{id}}")]
+        public string ID { get; set; }
+
+        [Default(0)]
+        public int CurrentLevel { get; set; }
+
+        [Inline]
+        public Data GameData { get; set; }
+
+        public Data FreshGameData
+        {
+            get
+            {
+                if (_FreshGameData == null)
+                    _FreshGameData = ScriptableObject.CreateInstance<Data>();
+
+                return _FreshGameData;
+            }
+        }
+
+        #region Notify Delegates
+        public delegate void dvNotify();
+        #endregion
+
+        #region Events
+        public event dvNotify OnAnyLevelAttained;
+        {{#each events}}
+        {{{this}}}
+        {{/each}}
+        #endregion
+
+        public void LevelUp()
+        {
+            var next_level = CurrentLevel + 1;
+
+            switch (next_level)
+            {
+                {{#each curve_notifiers}}
+                {{{this}}}
+                {{/each}}
+            }
+
+            if (GameData.Curves.Count > next_level)
+            {
+                if (OnAnyLevelAttained != null) OnAnyLevelAttained();
+                CurrentLevel++;
+            }
+
+        }
+
+    }
+
+    public class Data : BetterScriptableObject
+    {
+        #region Attributes
+        {{#each attributes}}
+
+        {{{this}}}
+
+        {{/each}}
+        #endregion
+
+        public List<Level> Curves { get; set; }
+
+
+        #region Unity Editor Logic
+        [UnityEditor.MenuItem("Idler/Characters/Create Data/{{id}}")]
+        static void CreateAsset()
+        {
+            var scriptable_object = CreateInstance<cMe.Data>();
+
+            UnityEditor.AssetDatabase.CreateAsset(scriptable_object, "{{path}}/{{id}}.asset");
+        }
+        #endregion
+
+        #region Setting Default Values
+        [Show]
+        protected void SetDefaults()
+        {
+            {{#each values}}
+            {{{this}}}
+            {{/each}}
+
+            {{#each curves}}
+            {{{this}}}
+            {{/each}}
+        }
+        #endregion
+
+        #region Helpers
+        public Data WithDefaults()
+        {
+            SetDefaults();
+            return this;
+        }
+        #endregion
+    }
+}
+

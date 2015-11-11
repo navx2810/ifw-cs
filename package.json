@@ -1,8 +1,9 @@
 {
   "dependencies": {
+    "handlebars": "^4.0.4",
     "lodash": "^3.10.1",
     "mithril": "^0.2.0",
-    "mustache": "^2.2.0",
+    "mkdirp": "^0.5.1",
     "node-uuid": "^1.4.3",
     "superagent": "^1.4.0"
   },

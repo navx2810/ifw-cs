@@ -47,4 +47,5 @@ app.on 'ready', ->
 				event.sender.send 'export:err', "Export path is a file, please change it to a directory"
 			else if stats.isDirectory()
 				console.log "Valid Directory! Exporting"
-				Exporter.export directory, model
+				console.log "\n#{JSON.stringify Exporter}"
+				Exporter model, directory
