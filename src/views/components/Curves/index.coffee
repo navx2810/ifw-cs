@@ -141,7 +141,7 @@ TableView =
       CostPercent = VM.Curves().CostPercent
 
       for curve, index in character.curves
-         level_row.push m 'th', "#{index + 1}"
+         level_row.push m 'th', "#{index}"
          damage_row.push m.component Cell, (curve: curve, attr: "damage")
          cost_row.push m.component Cell, (curve: curve, attr: "cost")
          notifier_row.push m.component NotifierCheckBox, (curve: curve)

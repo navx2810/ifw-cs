@@ -8,7 +8,8 @@ namespace {{class_name}}
 {
     public class Character : BetterBehaviour
     {
-        private Data _FreshGameData;
+        [Show, Inline]
+        private Data _GameData;
 
         [Default("{{id}}")]
         public string ID { get; set; }
@@ -16,18 +17,20 @@ namespace {{class_name}}
         [Default(0)]
         public int CurrentLevel { get; set; }
 
-        [Inline]
-        public Data GameData { get; set; }
-
-        public Data FreshGameData
+        public Data GameData
         {
             get
             {
-                if (_FreshGameData == null)
-                    _FreshGameData = ScriptableObject.CreateInstance<Data>();
-
-                return _FreshGameData;
+                if (_GameData == null) { return FreshGameData; }
+                return _GameData;
             }
+
+            set { _GameData = value; }
+        }
+
+        public Data FreshGameData
+        {
+            get { return _GameData = ScriptableObject.CreateInstance<Data>(); }
         }
 
         #region Notify Delegates
@@ -60,6 +63,11 @@ namespace {{class_name}}
 
         }
 
+        #region Unity Editor Logic
+        #if UNITY_EDITOR
+        [Show] private void CreateGameData() { GameData = FreshGameData; }
+        #endif
+        #endregion
     }
 
     public class Data : BetterScriptableObject
@@ -79,7 +87,7 @@ namespace {{class_name}}
         [UnityEditor.MenuItem("Idler/Characters/Create Data/{{id}}")]
         static void CreateAsset()
         {
-            var scriptable_object = CreateInstance<cMe.Data>();
+            var scriptable_object = CreateInstance<{{class_name}}.Data>();
 
             UnityEditor.AssetDatabase.CreateAsset(scriptable_object, "{{path}}/{{id}}.asset");
         }
@@ -92,6 +100,8 @@ namespace {{class_name}}
             {{#each values}}
             {{{this}}}
             {{/each}}
+
+            Curves = new List<Level>();
 
             {{#each curves}}
             {{{this}}}

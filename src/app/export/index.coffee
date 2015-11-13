@@ -107,7 +107,7 @@ AssignCurves = (curves) =>
 
 	for curve, index in curves
 		curve.index = index
-		template = Hbs.compile 'Curves[{{index}}] = new Level { Damage = {{damage}}, Cost = {{cost}} }'
+		template = Hbs.compile 'Curves.Add(new Level { Damage = {{damage}}, Cost = {{cost}} });'
 		curves_string.push template curve
 
 	return curves_string

@@ -78,7 +78,7 @@ Editing =
    view: (ctrl, props, extras) ->
       {attribute, index, character} = props
 
-      options_row = []
+      options_row = [m 'option', (disabled: true, selected: true), "Type"]
 
       for type in InEngineDataTypes()
          options_row.push m 'option.blue', (value: type), type

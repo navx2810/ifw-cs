@@ -4,32 +4,46 @@ using Vexe.Runtime.Types;
 
 namespace Idler.GameObjects
 {
-    [HasRequirements]
     public class Idler : BetterBehaviour
     {
-        [RequiredFromChildren(Add = true, Create = true, id = 0, Path = "Characters")]
         public Characters Characters { get; set; }
-
-        [RequiredFromChildren(Add = true, Create = true, id = 1, Path = "Currency")]
         public Currency Currency { get; set; }
 
+        #region Unity Editor Logic
         #if UNITY_EDITOR
         [UnityEditor.MenuItem("Idler/Setup Global GameObject")]
         static void SetUpGO()
         {
             var go = new GameObject("Idler");
-            go.AddComponent<Idler>();
+            var idler = go.AddComponent<Idler>();
+
+            var characters_go = new GameObject("Characters");
+            idler.Characters = characters_go.AddComponent<Characters>();
+            characters_go.transform.parent = go.transform;
+
+            var currency_go = new GameObject("Currency");
+            idler.Currency = currency_go.AddComponent<Currency>();
+            currency_go.transform.parent = go.transform;
+
+			#region Creation of Character Child GameObjects
+            {{#each characters}}
+
+            var {{class_name}}GO = new GameObject("{{id}}");
+            idler.Characters.{{class_name}} = {{class_name}}GO.AddComponent<{{class_name}}.Character>();
+            {{class_name}}GO.transform.parent = characters_go.transform;
+
+            {{/each}}
+            #endregion
         }
         #endif
+        #endregion
     }
 
-    [HasRequirements]
     public class Characters : BetterBehaviour
     {
         #region Characters
 
         {{#each characters}}
-        [RequiredFromChildren(Add = true, Create = true, id = {{@index}}, Path = "{{id}}")]
         public {{class_name}}.Character {{class_name}} { get; set; }
         {{/each}}
 
@@ -51,5 +65,14 @@ namespace Idler.GameObjects
     public class Currency : BetterBehaviour
     {
 
+    }
+}
+
+namespace Idler.Framework
+{
+    public struct Level
+    {
+        public int Damage { get; set; }
+        public int Cost { get; set; }
     }
 }
