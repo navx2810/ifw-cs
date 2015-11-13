@@ -1,0 +1,26 @@
+using UnityEngine;
+using System.Collections;
+using Vexe.Runtime.Types;
+
+public class Characters : BetterBehaviour
+{
+    #region Characters
+
+    {{#each characters}}
+    public {{class_name}} {{class_name}} { get; set; }
+    {{/each}}
+
+    #endregion
+
+    [Show]
+    public void SetAllWithDefaults()
+    {
+        #region Setting Defaults
+
+        {{#each characters}}
+        {{class_name}}.GameData = {{class_name}}.WithFreshGameData.WithDefaults;
+        {{/each}}
+
+        #endregion
+    }
+}

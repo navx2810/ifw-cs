@@ -2,71 +2,40 @@ using UnityEngine;
 using System.Collections;
 using Vexe.Runtime.Types;
 
-namespace Idler.GameObjects
-{
-    public class Idler : BetterBehaviour
-    {
-        public Characters Characters { get; set; }
-        public Currency Currency { get; set; }
+ public class IdlerGO : BetterBehaviour
+ {
+     public Characters Characters { get; set; }
+     public Currency Currency { get; set; }
 
-        #region Unity Editor Logic
-        #if UNITY_EDITOR
-        [UnityEditor.MenuItem("Idler/Setup Global GameObject")]
-        static void SetUpGO()
-        {
-            var go = new GameObject("Idler");
-            var idler = go.AddComponent<Idler>();
+     #region Unity Editor Logic
+     #if UNITY_EDITOR
+     [UnityEditor.MenuItem("Idler/Setup Global GameObject")]
+     static void SetUpGO()
+     {
+         var go = new GameObject("Idler");
+         var idler = go.AddComponent<IdlerGO>();
 
-            var characters_go = new GameObject("Characters");
-            idler.Characters = characters_go.AddComponent<Characters>();
-            characters_go.transform.parent = go.transform;
+         var characters_go = new GameObject("Characters");
+         idler.Characters = characters_go.AddComponent<Characters>();
+         characters_go.transform.parent = go.transform;
 
-            var currency_go = new GameObject("Currency");
-            idler.Currency = currency_go.AddComponent<Currency>();
-            currency_go.transform.parent = go.transform;
+         var currency_go = new GameObject("Currency");
+         idler.Currency = currency_go.AddComponent<Currency>();
+         currency_go.transform.parent = go.transform;
 
-			#region Creation of Character Child GameObjects
-            {{#each characters}}
+		#region Creation of Character Child GameObjects
+         {{#each characters}}
 
-            var {{class_name}}GO = new GameObject("{{id}}");
-            idler.Characters.{{class_name}} = {{class_name}}GO.AddComponent<{{class_name}}.Character>();
-            {{class_name}}GO.transform.parent = characters_go.transform;
+         var {{class_name}}GO = new GameObject("{{id}}");
+         idler.Characters.{{class_name}} = {{class_name}}GO.AddComponent<{{class_name}}>();
+         {{class_name}}GO.transform.parent = characters_go.transform;
 
-            {{/each}}
-            #endregion
-        }
-        #endif
-        #endregion
-    }
-
-    public class Characters : BetterBehaviour
-    {
-        #region Characters
-
-        {{#each characters}}
-        public {{class_name}}.Character {{class_name}} { get; set; }
-        {{/each}}
-
-        #endregion
-
-        [Show]
-        public void SetAllWithDefaults()
-        {
-            #region Setting Defaults
-
-            {{#each characters}}
-            {{class_name}}.FreshGameData.WithDefaults();
-            {{/each}}
-            
-            #endregion
-        }
-    }
-
-    public class Currency : BetterBehaviour
-    {
-
-    }
-}
+         {{/each}}
+         #endregion
+     }
+     #endif
+     #endregion
+ }
 
 namespace Idler.Framework
 {

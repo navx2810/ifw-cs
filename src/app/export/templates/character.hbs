@@ -4,118 +4,57 @@ using Vexe.Runtime.Types;
 using System.Collections.Generic;
 using Idler.Framework;
 
-namespace {{class_name}}
-{
-    public class Character : BetterBehaviour
-    {
-        [Show, Inline]
-        private Data _GameData;
+ public class {{class_name}} : BetterBehaviour
+ {
+     [Inline]
+     public so{{class_name}} GameData;
 
-        [Default("{{id}}")]
-        public string ID { get; set; }
+     [Default("{{id}}")]
+     public string ID { get; set; }
 
-        [Default(0)]
-        public int CurrentLevel { get; set; }
+     [Default(0)]
+     public int CurrentLevel { get; set; }
 
-        public Data GameData
-        {
-            get
-            {
-                if (_GameData == null) { return FreshGameData; }
-                return _GameData;
-            }
+     public so{{class_name}} WithFreshGameData
+     {
+         get { return GameData = ScriptableObject.CreateInstance<so{{class_name}}>(); }
+     }
 
-            set { _GameData = value; }
-        }
+     #region Notify Delegates
+     public delegate void dvNotify();
+     #endregion
 
-        public Data FreshGameData
-        {
-            get { return _GameData = ScriptableObject.CreateInstance<Data>(); }
-        }
+     #region Events
+     public event dvNotify OnAnyLevelAttained;
+     {{#each events}}
+     {{{this}}}
+     {{/each}}
+     #endregion
 
-        #region Notify Delegates
-        public delegate void dvNotify();
-        #endregion
+     public void LevelUp()
+     {
+         var next_level = CurrentLevel + 1;
 
-        #region Events
-        public event dvNotify OnAnyLevelAttained;
-        {{#each events}}
-        {{{this}}}
-        {{/each}}
-        #endregion
+         switch (next_level)
+         {
+             {{#each curve_notifiers}}
+             {{{this}}}
+             {{/each}}
+         }
 
-        public void LevelUp()
-        {
-            var next_level = CurrentLevel + 1;
+         if (GameData.Curves.Count > next_level)
+         {
+             if (OnAnyLevelAttained != null) OnAnyLevelAttained();
+             CurrentLevel++;
+         }
 
-            switch (next_level)
-            {
-                {{#each curve_notifiers}}
-                {{{this}}}
-                {{/each}}
-            }
+     }
 
-            if (GameData.Curves.Count > next_level)
-            {
-                if (OnAnyLevelAttained != null) OnAnyLevelAttained();
-                CurrentLevel++;
-            }
+     void Awake() { if(GameData == null) { GameData = WithFreshGameData; } }
 
-        }
-
-        #region Unity Editor Logic
-        #if UNITY_EDITOR
-        [Show] private void CreateGameData() { GameData = FreshGameData; }
-        #endif
-        #endregion
-    }
-
-    public class Data : BetterScriptableObject
-    {
-        #region Attributes
-        {{#each attributes}}
-
-        {{{this}}}
-
-        {{/each}}
-        #endregion
-
-        public List<Level> Curves { get; set; }
-
-
-        #region Unity Editor Logic
-        [UnityEditor.MenuItem("Idler/Characters/Create Data/{{id}}")]
-        static void CreateAsset()
-        {
-            var scriptable_object = CreateInstance<{{class_name}}.Data>();
-
-            UnityEditor.AssetDatabase.CreateAsset(scriptable_object, "{{path}}/{{id}}.asset");
-        }
-        #endregion
-
-        #region Setting Default Values
-        [Show]
-        protected void SetDefaults()
-        {
-            {{#each values}}
-            {{{this}}}
-            {{/each}}
-
-            Curves = new List<Level>();
-
-            {{#each curves}}
-            {{{this}}}
-            {{/each}}
-        }
-        #endregion
-
-        #region Helpers
-        public Data WithDefaults()
-        {
-            SetDefaults();
-            return this;
-        }
-        #endregion
-    }
-}
-
+     #region Unity Editor Logic
+     #if UNITY_EDITOR
+     [Show] private void CreateGameData() { GameData = WithFreshGameData; }
+     #endif
+     #endregion
+ }

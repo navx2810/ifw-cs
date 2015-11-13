@@ -1,0 +1,57 @@
+using UnityEngine;
+using System.Collections;
+using Vexe.Runtime.Types;
+using System.Collections.Generic;
+using Idler.Framework;
+
+public class so{{class_name}} : BetterScriptableObject
+{
+    #region Attributes
+    {{#each attributes}}
+
+    {{{this}}}
+
+    {{/each}}
+    #endregion
+
+    public List<Level> Curves { get; set; }
+
+
+    #region Unity Editor Logic
+    [UnityEditor.MenuItem("Idler/Characters/Create Data/{{id}}")]
+    static void CreateAsset()
+    {
+        var scriptable_object = CreateInstance<so{{class_name}}>();
+
+        UnityEditor.AssetDatabase.CreateAsset(scriptable_object, "{{path}}/{{id}}.asset");
+    }
+    #endregion
+
+    #region Setting Default Values
+    [Show]
+    protected void SetDefaults()
+    {
+        {{#each values}}
+        {{{this}}}
+        {{/each}}
+
+        Curves = new List<Level>();
+
+        {{#each curves}}
+        {{{this}}}
+        {{/each}}
+    }
+    #endregion
+
+    #region Helpers
+    public so{{class_name}} WithDefaults
+    {
+        get
+        {
+            SetDefaults();
+            return this;
+        }
+
+    }
+    #endregion
+}
