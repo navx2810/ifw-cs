@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Vexe.Runtime.Types;
+using System.Linq;
 
 public class Characters : BetterBehaviour
 {
@@ -12,6 +13,140 @@ public class Characters : BetterBehaviour
 
     #endregion
 
+    #region Methods to Add Characters
+        
+        {{#each characters}}
+        #region Adding {{id}}
+        public {{class_name}} Add{{id}}(string id)
+        {
+            var go = new GameObject("{{id}} : " + id);
+            var chara = go.AddComponent<{{class_name}}>();
+            chara.ID = id;
+            go.transform.parent = gameObject.transform;
+            return chara;
+        }
+
+        public {{class_name}} Add{{id}}() { return Add{{id}}("{{id}}"); }  
+        #endregion  
+    
+    {{/each}}
+    #endregion
+
+    #region Methods to Find Characters
+
+        {{#each characters}}
+        #region Finding {{id}}
+        public {{class_name}} Find{{id}}ByID(string id)
+        {
+            {{class_name}}[] charas = gameObject.GetComponentsInChildren<{{class_name}}>();
+
+            var mychar = (from {{class_name}} chara in charas where chara.ID == id select chara).FirstOrDefault();
+
+            return mychar;
+
+        }
+
+        public {{class_name}}[] Find{{id}}sByID(string id)
+        {
+            {{class_name}}[] charas = gameObject.GetComponentsInChildren<{{class_name}}>();
+
+            var mychar = (from {{class_name}} chara in charas where chara.ID == id select chara).ToArray();
+
+            return mychar;
+        }
+
+        public {{class_name}}[] FindAll{{id}}s() { return gameObject.GetComponentsInChildren<{{class_name}}>(); }
+        #endregion
+
+        {{/each}} 
+    #endregion
+
+    #region Methods for All Characters
+
+    #region Get Damages
+
+    public int GetTotalDamageForCharacters()
+    {
+        int total_damage = 0;
+        
+        {{#each characters}}
+        var {{id}}s = FindAll{{id}}s();
+        foreach(var chara in {{id}}s)
+        {
+            if (chara.CurrentLevel < chara.GameData.Curves.Count)
+                total_damage += chara.CurrentLevelCurve.Damage; 
+        }
+
+        {{/each}}
+
+        return total_damage;
+    }
+
+    {{#each characters}}
+    #region Getting Damages For {{id}}
+    public int GetTotalDamageFor{{id}}s()
+    {
+        int total_damage = 0;
+        
+        var {{id}}s = FindAll{{id}}s();
+        foreach(var chara in {{id}}s)
+        { 
+            if (chara.CurrentLevel < chara.GameData.Curves.Count)
+                total_damage += chara.CurrentLevelCurve.Damage;
+        }
+
+        return total_damage;
+
+    }
+    #endregion
+
+    {{/each}}
+
+    #endregion
+
+    #region Get Costs
+
+    public int GetTotalCostForCharacters()
+    {
+        int total_cost = 0;
+        
+        {{#each characters}}
+        var {{id}}s = FindAll{{id}}s();
+        foreach(var chara in {{id}}s)
+        {
+            if (chara.CurrentLevel < chara.GameData.Curves.Count)
+                total_cost += chara.CurrentLevelCurve.Cost; 
+        }
+
+        {{/each}}
+
+        return total_cost;
+    }
+
+    {{#each characters}}
+    #region Getting Cost For {{id}}
+    public int GetTotalCostFor{{id}}s()
+    {
+        int total_cost = 0;
+        
+        var {{id}}s = FindAll{{id}}s();
+        foreach(var chara in {{id}}s) 
+        { 
+            if (chara.CurrentLevel < chara.GameData.Curves.Count)
+                total_cost += chara.CurrentLevelCurve.Cost; 
+        }
+
+        return total_cost;
+
+    }
+    #endregion
+
+    {{/each}}
+
+    #endregion
+
+    #endregion
+
     [Show]
     public void SetAllWithDefaults()
     {
@@ -19,6 +154,9 @@ public class Characters : BetterBehaviour
 
         {{#each characters}}
         {{class_name}}.GameData = {{class_name}}.WithFreshGameData.WithDefaults;
+        var {{class_name}}s = gameObject.GetComponentsInChildren<{{class_name}}>();
+        foreach (var chara in {{class_name}}s) { chara.GameData = chara.WithFreshGameData.WithDefaults; }
+
         {{/each}}
 
         #endregion

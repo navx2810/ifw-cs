@@ -6,55 +6,66 @@ using Idler.Framework;
 
  public class {{class_name}} : BetterBehaviour
  {
-     [Inline]
-     public so{{class_name}} GameData;
+    [Inline]
+    public so{{class_name}} GameData;
 
-     [Default("{{id}}")]
-     public string ID { get; set; }
+    [Default("{{id}}")]
+    public string ID { get; set; }
 
-     [Default(0)]
-     public int CurrentLevel { get; set; }
+    [Default(0)]
+    public int CurrentLevel { get; set; }
 
-     public so{{class_name}} WithFreshGameData
-     {
-         get { return GameData = ScriptableObject.CreateInstance<so{{class_name}}>(); }
-     }
+    public so{{class_name}} WithFreshGameData
+    {
+        get { return GameData = ScriptableObject.CreateInstance<so{{class_name}}>(); }
+    }
 
-     #region Notify Delegates
-     public delegate void dvNotify();
-     #endregion
+    #region Notify Delegates
+    public delegate void dvNotify();
+    #endregion
 
-     #region Events
-     public event dvNotify OnAnyLevelAttained;
-     {{#each events}}
-     {{{this}}}
-     {{/each}}
-     #endregion
+    #region Events
+    public event dvNotify OnAnyLevelAttained;
+    {{#each events}}
+    {{{this}}}
+    {{/each}}
+    #endregion
 
-     public void LevelUp()
-     {
-         var next_level = CurrentLevel + 1;
+    public void LevelUp()
+    {
+        var next_level = CurrentLevel + 1;
 
-         switch (next_level)
-         {
-             {{#each curve_notifiers}}
-             {{{this}}}
-             {{/each}}
-         }
+        switch (next_level)
+        {
+            {{#each curve_notifiers}}
+            {{{this}}}
+            {{/each}}
+        }
 
-         if (GameData.Curves.Count > next_level)
-         {
-             if (OnAnyLevelAttained != null) OnAnyLevelAttained();
-             CurrentLevel++;
-         }
+        if (GameData.Curves.Count > next_level)
+        {
+            if (OnAnyLevelAttained != null) OnAnyLevelAttained();
+            CurrentLevel++;
+        }
 
-     }
+    }
 
-     void Awake() { if(GameData == null) { GameData = WithFreshGameData; } }
+    public Level CurrentLevelCurve
+    {
+        get { return GameData.Curves[CurrentLevel]; }
+    }
 
-     #region Unity Editor Logic
-     #if UNITY_EDITOR
-     [Show] private void CreateGameData() { GameData = WithFreshGameData; }
-     #endif
-     #endregion
- }
+    public
+
+    void Awake()
+    {
+        if(GameData == null) { GameData = WithFreshGameData; } 
+        if(GameData.Curves == null) { GameData.Curves = new List<Level>(); }
+    }
+
+    #region Unity Editor Logic
+    #if UNITY_EDITOR
+    [Show] private void CreateGameData() { GameData = WithFreshGameData; }
+    #endif
+    #endregion
+}
