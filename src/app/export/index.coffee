@@ -102,7 +102,7 @@ AssignDefaultValues = (attributes) =>
 	for attribute in attributes
 		if attribute.default_value?
 
-			if typeof(attribute.default_value) is 'string'
+			if typeof(attribute.default_value) is 'string' or attribute.type is 'Paragraph'
 				template = Hbs.compile '{{key}} = "{{default_value}}";'
 			else
 				template = Hbs.compile '{{key}} = {{default_value}};'
