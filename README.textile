@@ -1,0 +1,19 @@
+h1. Idler Framework
+
+h2. What is this?
+
+This repository contains a project for the capstone of the gaming major at Pennsylvania College of Technology.
+
+The goal of the project was to create an application in a few weeks which assisted game developers in creating *Idler* games.
+
+h3. Technology (Requirements)
+
+- CoffeeScript := one of the requirement was a new language, since CoffeeScript was foreign to me, it fit the bill.
+- Mithril := Mithril was a UI framework that I have never used before. It is very lean and was quick to learn. I believe that the API of Mithril at the time I used it contained only 15 public methods!
+- Superagent := handles AJAX requests.
+- Handlebars := uses templates to generate .CS code.
+- Webpack := the build system used to deploy the application.
+
+h3. Research
+
+The whole process of creating a web application was new to me. Almost all aspects of this project contributed to the research portion of the project.
